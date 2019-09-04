@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.stop_lang.stop.Stop;
+import org.stop_lang.stop.models.Property;
+import org.stop_lang.stop.models.State;
 import org.stop_lang.stop.validation.IncludePhase;
 import org.stop_lang.stop.validation.StopValidationException;
 
@@ -17,7 +19,10 @@ public class ParserTest {
         new Stop("./examples/kitchen-sink.stop");
         new Stop("./examples/types.stop");
         new Stop("./examples/references.stop");
-        new Stop("./examples/enum.stop");
+        Stop enumStop = new Stop("./examples/enum.stop");
+        State getStatus = enumStop.getStates().get("sandbox.GetStatus");
+        Property property = getStatus.getProperties().get("status");
+        Assertions.assertNotNull(property);
     }
 
     @Test

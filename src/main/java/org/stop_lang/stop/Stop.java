@@ -213,7 +213,7 @@ public class Stop {
                                 enumeration = enumerations.get(stopFieldSymbol.getTypeName());
                             }
                             if (enumeration == null){
-                                enumeration = enumerations.get(fullName);
+                                enumeration = this.enumerations.get(fullName);
                             }
                             if(enumeration!=null){
                                 property = new EnumerationProperty(symbolName, enumeration, false, provider, optional);
