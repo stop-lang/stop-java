@@ -5,4 +5,4 @@ Stop Language Java Implementation
 
 The parser was generated with the following command using ANTLR 4.7.2:
 
-`antlr -o ./src/main/java/org/stop_lang/parser -package org.stop_lang.parser -listener -no-visitor -Xexact-output-dir ../stop/Stop.g4`
+`antlr -o ./src/main/java/org/stop_lang/stop/parser -package org.stop_lang.stop.parser -listener -no-visitor -Xexact-output-dir ../stop/Stop.g4`

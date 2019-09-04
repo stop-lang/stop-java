@@ -1,0 +1,151 @@
+/**
+ * This Stop file seeks to throw the kitchen sink at the parser and exercise every language feature.
+ */
+
+package kitchen.sink
+
+// Single Line Comment
+
+/**
+ * Multi-line comment
+ */
+
+// This includes the Header and Parameter models
+include "./examples/kitchen-sink-include.stop"
+
+Request {
+    enum Method {
+        GET
+        POST
+        PUT
+        DELETE
+        OPTIONS
+    }
+    Method method
+    string path
+    optional string body
+    timestamp time
+    [Header] headers
+    [Parameter] parameters
+}
+
+start Router {
+    Request request
+    -> Login
+    -> Authenticate
+    -> Dashboard
+    -> Profile
+    -> CreatePost
+}
+
+User {
+    uint64 id
+    string email
+    string username
+}
+
+UserNotFoundError {
+    string  message
+    -> Render
+}
+
+async GetUserWithPassword <- User throws UserNotFoundError {
+    string login
+    string password
+    timeout 5 -> GetUserWithPasswordTimeoutError
+}
+
+Post {
+    string  title
+    string  body
+    bool    public
+}
+
+async GetUserPosts <- [Post] throws UserNotFoundError {
+    uint64 user_id
+    timeout 5 -> GetUserPostsTimeoutError
+}
+
+FilterPublicPosts <- [Post] {
+    [Post] posts
+}
+
+Login {
+    -> Render
+}
+
+Authenticate {
+    string login
+    string password
+    User user <- GetUserWithPassword
+    -> Redirect
+}
+
+Dashboard {
+    uint64 user_id
+    [Post] posts <- GetUserPosts
+    -> Render
+}
+
+Profile {
+    uint64 user_id
+    [Post] posts <- GetUserPosts
+    [Post] publicPosts <- FilterPublicPosts
+    Request currentRequest <- GetRequest
+    -> Render
+}
+
+GetRequest <- Request {
+}
+
+CreatePost {
+    Post post
+    >> PushNotification
+    -> Response
+}
+
+Render {
+    string html
+    -> Response
+}
+
+Redirect {
+    string url
+    -> Response
+}
+
+GetUserWithPasswordTimeoutError {
+    GetUserWithPassword timedOutState
+    -> Response
+}
+
+GetUserPostsTimeoutError {
+    GetUserPosts timedOutState
+    -> Response
+}
+
+stop Response {
+    string content_type
+    string content
+    uint32 status
+    [Header] headers
+}
+
+queue PushNotification {
+    string message
+    -> PublishPushNotification
+}
+
+stop PublishPushNotification {
+    string message
+    [string] recipients
+}
+
+MultipleEnumTest {
+    enum TestEnum {
+        ONE
+        TWO
+        THREE
+    }
+    [TestEnum] tests
+}
