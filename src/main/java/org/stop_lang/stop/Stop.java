@@ -295,7 +295,6 @@ public class Stop {
         if (!exceptions.isEmpty()) {
             List<String> exceptionMessages = new ArrayList<>();
             for (Exception exception : exceptions){
-                System.err.println(exception.getMessage());
                 exceptionMessages.add(exception.getMessage());
             }
             throw new StopValidationException(String.join(", ", exceptionMessages));
