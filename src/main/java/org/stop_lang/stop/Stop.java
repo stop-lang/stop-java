@@ -327,48 +327,8 @@ public class Stop {
             }
         }
 
-        // Map dependencies
-        Map<Property, Set<Property>> dependencies = new HashMap<Property, Set<Property>>();
-        for (Map.Entry<Property, Set<Property>> dependentEntry : dependents.entrySet()) {
-            Property dependent = dependentEntry.getKey();
-            for (Property dependency : dependentEntry.getValue()){
-                Set<Property> dependencyDependents = dependencies.get(dependency);
-                if (dependencyDependents==null){
-                    dependencyDependents = new HashSet<Property>();
-                }
-                dependencyDependents.add(dependent);
-                dependencies.put(dependency, dependencyDependents);
-            }
-        }
-
         // Create initial ordered list
-        List<Property> orderedDependencies = new ArrayList<>();
-        for (Property property : dependencies.keySet()){
-            orderedDependencies.add(property);
-        }
-
-        // Order dependencies
-        for (Map.Entry<Property, Set<Property>> dependencyEntry : dependencies.entrySet()) {
-            Property property = dependencyEntry.getKey();
-            int index = orderedDependencies.indexOf(property);
-            for (Property dependent : dependencyEntry.getValue()){
-                if (orderedDependencies.contains(dependent)) {
-                    int dependentIndex = orderedDependencies.indexOf(dependent);
-                    if (dependentIndex < index) {
-                        orderedDependencies.remove(property);
-                        index = dependentIndex;
-                        orderedDependencies.add(index, property);
-                    }
-                }
-            }
-        }
-
-        // Add remaining dependencies
-        for (Property property : dependents.keySet()){
-            if (!orderedDependencies.contains(property)){
-                orderedDependencies.add(property);
-            }
-        }
+        List<Property> orderedDependencies = orderDependencies(dependents);
 
         // Insert in ordered map
         for (Property property : orderedDependencies){
@@ -377,6 +337,53 @@ public class Stop {
 
         // Set new properties on state
         state.setProperties(orderedProperties);
+    }
+
+    private List<Property> orderDependencies(Map<Property, Set<Property>> dependencies) throws StopValidationException{
+        List<Property> result = new ArrayList<Property>();
+        Set<Property> visited = new HashSet<Property>();
+        Set<Property> expanded = new HashSet<Property>();
+
+        for (Property property : dependencies.keySet()){
+            explore(property, dependencies, result, visited, expanded);
+        }
+
+        return result;
+    }
+
+    private static <Property> void explore(Property node, Map<Property, Set<Property>> dependencies,
+                                    List<Property> ordering, Set<Property> visited,
+                                    Set<Property> expanded) throws StopValidationException{
+        /* Check whether we've been here before.  If so, we should stop the
+         * search.
+         */
+        if (visited.contains(node)) {
+            /* There are two cases to consider.  First, if this node has
+             * already been expanded, then it's already been assigned a
+             * position in the final topological sort and we don't need to
+             * explore it again.  However, if it hasn't been expanded, it means
+             * that we've just found a node that is currently being explored,
+             * and therefore is part of a cycle.  In that case, we should
+             * report an error.
+             */
+            if (expanded.contains(node)) return;
+            throw new StopValidationException("Dynamic property dependency graph contains a cycle.");
+        }
+
+        /* Mark that we've been here */
+        visited.add(node);
+
+        /* Recursively explore all of the node's predecessors. */
+        for (Property predecessor: dependencies.get(node))
+            explore(predecessor, dependencies, ordering, visited, expanded);
+
+        /* Having explored all of the node's predecessors, we can now add this
+         * node to the sorted ordering.
+         */
+        ordering.add(node);
+
+        /* Similarly, mark that this node is done being expanded. */
+        expanded.add(node);
     }
 
     private String getRootFromPropertyName(String propertyName){
