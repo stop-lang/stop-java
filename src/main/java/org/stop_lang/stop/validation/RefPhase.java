@@ -241,57 +241,6 @@ public class RefPhase extends StopBaseListener {
         }
     }
 
-    @Override public void exitTimeout(StopParser.TimeoutContext ctx) {
-        TimeoutSymbol timeoutSymbol = ((ModelSymbol)currentScope).getTimeout();
-        if(timeoutSymbol == null){
-            errors.add(new StopValidationException("Couldn't define timeout because it was not defined"));
-        }else {
-            String modelName = timeoutSymbol.getFullName();
-            Symbol modelSymbol = globals.resolve(modelName);
-            if(modelSymbol == null){
-                errors.add(new StopValidationException("Couldn't define timeout transition because "
-                        + modelName + " isn't defined"));
-            }else{
-                ModelSymbol timeoutModelSymbol = (ModelSymbol)modelSymbol;
-                if (timeoutModelSymbol.isQueue()){
-                    errors.add(new StopValidationException("Couldn't define timeout transition because " + modelName + " is a queue state"));
-                }
-            }
-            if (modelSymbol instanceof ModelSymbol) {
-                ModelSymbol timeoutModelSymbol = (ModelSymbol) modelSymbol;
-
-                int fieldCount = 0;
-
-                for(Symbol timeoutModelFieldSymbol : timeoutModelSymbol.getAllSymbols()){
-                    if (timeoutModelFieldSymbol instanceof StopFieldSymbol){
-                        fieldCount++;
-                    }
-                }
-
-                if (fieldCount > 0) {
-                    if(fieldCount == 1) {
-                        Symbol timedOutStateSymbol = timeoutModelSymbol.resolve("timedOutState");
-                        if (timedOutStateSymbol != null) {
-                            if (timedOutStateSymbol instanceof ModelFieldSymbol) {
-                                ModelFieldSymbol fieldSymbol = (ModelFieldSymbol) timedOutStateSymbol;
-                                String fieldSymbolTypeName = fieldSymbol.getTypeName();
-                                if (!fieldSymbolTypeName.equals(currentScope.getName())) {
-                                    errors.add(new StopValidationException("Couldn't define timeout transition because timedOutState has type " + fieldSymbol.getTypeName() + " instead of " + currentScope.getName()));
-                                }
-                            } else {
-                                errors.add(new StopValidationException("Couldn't define timeout transition because timedOutState isn't defined as type " + currentScope.getName()));
-                            }
-                        } else {
-                            errors.add(new StopValidationException("Couldn't define timeout transition because timedOutState not defined"));
-                        }
-                    }else{
-                        errors.add(new StopValidationException("Couldn't define timeout transition because only the timedOutState property can be defined"));
-                    }
-                }
-            }
-        }
-    }
-
     private Symbol findReference(Scope scope, String reference, boolean optional){
         String[] parts = reference.split("\\.");
         String valueName = parts[0];

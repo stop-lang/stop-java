@@ -10,14 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelSymbol extends SymbolWithScope {
-    private boolean async = false;
     private boolean stop =false;
     private boolean start =false;
     private boolean queue = false;
     private Map<StopParser.Throw_parameterContext, ThrowSymbol> errors = new HashMap<>();
     private Map<StopParser.TransitionContext, TransitionSymbol> transitions = new HashMap<>();
     private Map<StopParser.EnqueueContext, EnqueueSymbol> enqueues = new HashMap<>();
-    private TimeoutSymbol timeout;
     private ReturnSymbol returnSymbol = null;
     private String fullName;
     private String packageName;
@@ -29,8 +27,6 @@ public class ModelSymbol extends SymbolWithScope {
             stop = true;
         } else if (ctx.START() != null){
             start = true;
-        }else if(ctx.ASYNC() != null) {
-            async = true;
         } else if (ctx.QUEUE() != null){
             queue = true;
         }
@@ -60,9 +56,6 @@ public class ModelSymbol extends SymbolWithScope {
         return fullName;
     }
 
-    public boolean isAsync(){
-        return async;
-    }
     public boolean isStop(){
         return stop;
     }
@@ -100,14 +93,6 @@ public class ModelSymbol extends SymbolWithScope {
 
     public Collection<TransitionSymbol> getTransitions(){
         return transitions.values();
-    }
-
-    public void setTimeout(TimeoutSymbol timeout){
-        this.timeout = timeout;
-    }
-
-    public TimeoutSymbol getTimeout(){
-        return this.timeout;
     }
 
     public void addEnqueue(EnqueueSymbol enqueueSymbol){

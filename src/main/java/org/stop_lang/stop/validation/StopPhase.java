@@ -121,9 +121,6 @@ public class StopPhase extends StopBaseListener {
         for (ThrowSymbol throwSymbol : modelSymbol.getErrors()) {
             transitions.add(throwSymbol.getName());
         }
-        if(modelSymbol.getTimeout()!=null){
-            transitions.add(modelSymbol.getTimeout().getName());
-        }
 
         if (modelSymbol.getTransitions().isEmpty()){
             return false;

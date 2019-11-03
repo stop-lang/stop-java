@@ -1,12 +1,13 @@
 package org.stop_lang.stop.models;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class State {
     public enum StateType {
         SYNC,
-        ASYNC,
         START,
         STOP,
         QUEUE
@@ -15,7 +16,7 @@ public class State {
     protected String name;
     protected Map<String, State> transitions;
     protected Map<String, State> errors;
-    protected Map<String, Property> properties;
+    protected LinkedHashMap<String, Property> properties;
     protected Map<String, Enumeration> enumerations;
     protected Map<String, State> enqueues;
     protected StateType type;
@@ -27,7 +28,7 @@ public class State {
         this.name = name;
         this.transitions = new TreeMap<String, State>();
         this.errors = new TreeMap<String, State>();
-        this.properties = new TreeMap<String, Property>();
+        this.properties = new LinkedHashMap<String, Property>();
         this.enumerations = new TreeMap<String, Enumeration>();
         this.enqueues = new TreeMap<String, State>();
         this.type = StateType.SYNC;
@@ -70,13 +71,15 @@ public class State {
         return this.errors;
     }
 
-    public void setProperties(TreeMap<String, Property> properties){
+    public void setProperties(LinkedHashMap<String, Property> properties){
         this.properties = properties;
     }
 
-    public Map<String, Property> getProperties(){
+    public LinkedHashMap<String, Property> getProperties(){
         return this.properties;
     }
+
+    public Collection<Property> getOrderedProperties() { return this.properties.values(); }
 
     public void setEnumerations(TreeMap<String, Enumeration> enumerations){
         this.enumerations = enumerations;
@@ -92,10 +95,6 @@ public class State {
 
     public boolean isSync(){
         return this.type == StateType.SYNC;
-    }
-
-    public boolean isAsync(){
-        return this.type == StateType.ASYNC;
     }
 
     public boolean isStart(){

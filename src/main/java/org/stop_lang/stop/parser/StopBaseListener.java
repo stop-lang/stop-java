@@ -1,4 +1,4 @@
-// Generated from ../stop/Stop.g4 by ANTLR 4.7.2
+// Generated from Stop.g4 by ANTLR 4.7.2
 package org.stop_lang.stop.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -100,30 +100,6 @@ public class StopBaseListener implements StopListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock_with_timeout(StopParser.Block_with_timeoutContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBlock_with_timeout(StopParser.Block_with_timeoutContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBlock_with_timeout_statement(StopParser.Block_with_timeout_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBlock_with_timeout_statement(StopParser.Block_with_timeout_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterReturn_block(StopParser.Return_blockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -143,30 +119,6 @@ public class StopBaseListener implements StopListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitReturn_block_statement(StopParser.Return_block_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReturn_block_with_timeout(StopParser.Return_block_with_timeoutContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReturn_block_with_timeout(StopParser.Return_block_with_timeoutContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterReturn_block_with_timeout_statement(StopParser.Return_block_with_timeout_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitReturn_block_with_timeout_statement(StopParser.Return_block_with_timeout_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -244,37 +196,37 @@ public class StopBaseListener implements StopListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsync_source(StopParser.Async_sourceContext ctx) { }
+	@Override public void enterDynamic_source(StopParser.Dynamic_sourceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsync_source(StopParser.Async_sourceContext ctx) { }
+	@Override public void exitDynamic_source(StopParser.Dynamic_sourceContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsync_source_mapping(StopParser.Async_source_mappingContext ctx) { }
+	@Override public void enterDynamic_source_mapping(StopParser.Dynamic_source_mappingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsync_source_mapping(StopParser.Async_source_mappingContext ctx) { }
+	@Override public void exitDynamic_source_mapping(StopParser.Dynamic_source_mappingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsync_source_mapping_parameter(StopParser.Async_source_mapping_parameterContext ctx) { }
+	@Override public void enterDynamic_source_mapping_parameter(StopParser.Dynamic_source_mapping_parameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsync_source_mapping_parameter(StopParser.Async_source_mapping_parameterContext ctx) { }
+	@Override public void exitDynamic_source_mapping_parameter(StopParser.Dynamic_source_mapping_parameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -292,13 +244,13 @@ public class StopBaseListener implements StopListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsync_source_mapping_parameter_rename(StopParser.Async_source_mapping_parameter_renameContext ctx) { }
+	@Override public void enterDynamic_source_mapping_parameter_rename(StopParser.Dynamic_source_mapping_parameter_renameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsync_source_mapping_parameter_rename(StopParser.Async_source_mapping_parameter_renameContext ctx) { }
+	@Override public void exitDynamic_source_mapping_parameter_rename(StopParser.Dynamic_source_mapping_parameter_renameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -359,18 +311,6 @@ public class StopBaseListener implements StopListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitThrow_parameter(StopParser.Throw_parameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTimeout(StopParser.TimeoutContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTimeout(StopParser.TimeoutContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

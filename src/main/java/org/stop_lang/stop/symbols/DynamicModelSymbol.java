@@ -15,10 +15,10 @@ public class DynamicModelSymbol extends SymbolWithScope {
     private Map<String, String> sourceMapping = null;
 
     public DynamicModelSymbol(StopParser.FieldContext ctx, Scope enclosingScope, String defaultPackageName){
-        super(ctx.async_source().model_type().getText());
+        super(ctx.dynamic_source().model_type().getText());
         setScope(enclosingScope);
         packageName = defaultPackageName;
-        String name = ctx.async_source().model_type().getText();
+        String name = ctx.dynamic_source().model_type().getText();
 
         if (!isReference(name)) {
             ParseTree p = getRootContext(ctx).getChild(0);
@@ -32,11 +32,11 @@ public class DynamicModelSymbol extends SymbolWithScope {
             }
         }
 
-        if (ctx.async_source().async_source_mapping() != null){
+        if (ctx.dynamic_source().dynamic_source_mapping() != null){
             Map<String, String> asyncSourceMapping = new HashMap<String, String>();
-            for (StopParser.Async_source_mapping_parameterContext parameterContext :
-                    ctx.async_source().async_source_mapping().async_source_mapping_parameter()){
-                asyncSourceMapping.put(parameterContext.ID().getText(), parameterContext.async_source_mapping_parameter_rename().getText());
+            for (StopParser.Dynamic_source_mapping_parameterContext parameterContext :
+                    ctx.dynamic_source().dynamic_source_mapping().dynamic_source_mapping_parameter()){
+                asyncSourceMapping.put(parameterContext.ID().getText(), parameterContext.dynamic_source_mapping_parameter_rename().getText());
             }
             sourceMapping = asyncSourceMapping;
         }

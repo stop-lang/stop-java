@@ -14,7 +14,6 @@ public class StateTest {
         Assertions.assertFalse(s.equals(new String()));
         Assertions.assertTrue(s.isSync());
         Assertions.assertEquals(s.getType(), State.StateType.SYNC);
-        Assertions.assertFalse(s.isAsync());
 
         Assertions.assertFalse(s.hasReturnType());
 

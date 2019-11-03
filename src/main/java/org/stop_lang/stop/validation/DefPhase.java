@@ -40,22 +40,7 @@ public class DefPhase extends StopBaseListener {
 
     @Override public void exitModel(StopParser.ModelContext ctx) {
         ModelSymbol modelSymbol = (ModelSymbol) currentScope;
-        if (modelSymbol.isAsync() && (modelSymbol.getTimeout() == null)){
-            errors.add(new StopValidationException("Asynchronous states " + modelSymbol.getName() + " must have a timeout defined"));
-        }
         currentScope = currentScope.getEnclosingScope();
-    }
-
-    @Override public void exitTimeout(StopParser.TimeoutContext ctx){
-        ModelSymbol modelSymbol = (ModelSymbol) currentScope;
-        String numberString = ctx.NUMBER().getText();
-        int timeout = Integer.parseInt(numberString);
-        if(timeout == 0){
-            errors.add(new StopValidationException("Timeout must be greater than zero for " + modelSymbol.getName()));
-        }else {
-            TimeoutSymbol timeoutSymbol = new TimeoutSymbol(ctx, currentScope, packageName);
-            modelSymbol.setTimeout(timeoutSymbol);
-        }
     }
 
     @Override public void enterEnumeration(StopParser.EnumerationContext ctx) {
@@ -89,7 +74,7 @@ public class DefPhase extends StopBaseListener {
         }
 
         if(field != null){
-            if (ctx.async_source() != null){
+            if (ctx.dynamic_source() != null){
                 DynamicModelSymbol dynamicModelSymbol = new DynamicModelSymbol(ctx, currentScope, packageName);
                 field.setDynamicModel(dynamicModelSymbol);
             }

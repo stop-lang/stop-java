@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class Stop {
+    private final static String REFERENCE_DELIMETER = ".";
+
     private Map<String, State> states;
     private Map<String, Enumeration> enumerations;
 
@@ -82,23 +84,19 @@ public class Stop {
             if (symbol instanceof ModelSymbol){
                 ModelSymbol modelSymbol = (ModelSymbol)symbol;
                 String name = modelSymbol.getName();
-                if (modelSymbol.isAsync()){
-                    AsyncState asyncState = new AsyncState(name, modelSymbol.getTimeout().getTimeoutSeconds());
-                    states.put(name, asyncState);
-                }else{
-                    State.StateType type = State.StateType.SYNC;
 
-                    if (modelSymbol.isStop()){
-                        type = State.StateType.STOP;
-                    } else if (modelSymbol.isStart()){
-                        type = State.StateType.START;
-                    } else if (modelSymbol.isQueue()){
-                        type = State.StateType.QUEUE;
-                    }
+                State.StateType type = State.StateType.SYNC;
 
-                    State state = new State(name, type);
-                    states.put(name, state);
+                if (modelSymbol.isStop()){
+                    type = State.StateType.STOP;
+                } else if (modelSymbol.isStart()){
+                    type = State.StateType.START;
+                } else if (modelSymbol.isQueue()){
+                    type = State.StateType.QUEUE;
                 }
+
+                State state = new State(name, type);
+                states.put(name, state);
             }
             if (symbol instanceof EnumSymbol){
                 EnumSymbol enumSymbol = (EnumSymbol)symbol;
@@ -116,16 +114,6 @@ public class Stop {
 
                 if (modelState == null){
                     throw new StopValidationException("model " + name + " not found");
-                }
-
-                if (modelState instanceof AsyncState){
-                    AsyncState asyncState = (AsyncState)modelState;
-
-                    String transitionName = modelSymbol.getTimeout().getFullName();
-                    State timeoutState = states.get(transitionName);
-                    if (timeoutState != null){
-                        asyncState.setTimeoutTransition(timeoutState);
-                    }
                 }
 
                 TreeMap<String, State> transitions = new TreeMap<String, State>(String.CASE_INSENSITIVE_ORDER);
@@ -156,13 +144,6 @@ public class Stop {
                         errors.put(errorTransitionName, errorState);
                     }
                 }
-                if (modelSymbol.getTimeout() != null){
-                    String timeoutTransitionName = modelSymbol.getTimeout().getFullName();
-                    State errorState = states.get(timeoutTransitionName);
-                    if (errorState!=null){
-                        errors.put(timeoutTransitionName, errorState);
-                    }
-                }
                 modelState.setErrors(errors);
 
                 TreeMap<String, Enumeration> enumerations = new TreeMap<String, Enumeration>(String.CASE_INSENSITIVE_ORDER);
@@ -189,7 +170,7 @@ public class Stop {
                     modelState.setReturn(returnPropertyType, returnState, modelSymbol.getReturn().isCollection());
                 }
 
-                TreeMap<String, Property> properties = new TreeMap<String, Property>(String.CASE_INSENSITIVE_ORDER);
+                LinkedHashMap<String, Property> properties = new LinkedHashMap<String, Property>();
                 for (Symbol childSymbol : modelSymbol.getSymbols()){
                     if (childSymbol instanceof StopFieldSymbol) {
                         StopFieldSymbol stopFieldSymbol = (StopFieldSymbol)childSymbol;
@@ -250,6 +231,8 @@ public class Stop {
                 modelState.setProperties(properties);
             }
         }
+
+        validateStateProperties();
     }
 
     private static Property.PropertyType getPropertyType(String typeName){
@@ -299,5 +282,112 @@ public class Stop {
             }
             throw new StopValidationException(String.join(", ", exceptionMessages));
         }
+    }
+
+    private void validateStateProperties() throws StopValidationException{
+        for (State state : this.states.values()){
+            validateStateProperties(state);
+        }
+    }
+
+    private void validateStateProperties(State state)
+            throws StopValidationException{
+        LinkedHashMap<String, Property> orderedProperties = new LinkedHashMap<>();
+        LinkedHashMap<String, Property> unorderedProperties = state.getProperties();
+
+        // Insert properties without providers first
+        for (Map.Entry<String, Property> unorderedPropertyEntry : unorderedProperties.entrySet()) {
+            if (unorderedPropertyEntry.getValue().getProvider()==null){
+                orderedProperties.put(unorderedPropertyEntry.getKey(), unorderedPropertyEntry.getValue());
+            }
+        }
+
+        // Map dependents
+        Map<Property, Set<Property>> dependents = new HashMap<Property, Set<Property>>();
+        for (Map.Entry<String, Property> propertyEntry : state.getProperties().entrySet()) {
+            Property property = propertyEntry.getValue();
+            if (property.getProvider() != null) {
+                Set<Property> providerProperties = new HashSet<>();
+                for (Map.Entry<String, Property> providerPropertyEntry : property.getProvider().getProperties().entrySet()){
+                    if (providerPropertyEntry.getValue().getProvider()==null) {
+                        String propertyName = providerPropertyEntry.getKey();
+                        if (property.getProviderMapping() != null) {
+                            if (property.getProviderMapping().containsKey(propertyName)) {
+                                propertyName = property.getProviderMapping().get(propertyName);
+                            }
+                            propertyName = getRootFromPropertyName(propertyName);
+                        }
+                        Property providerProperty = state.getProperties().get(propertyName);
+                        if ((providerProperty != null) && (providerProperty.getProvider() != null)) {
+                            providerProperties.add(providerProperty);
+                        }
+                    }
+                }
+                dependents.put(property, providerProperties);
+            }
+        }
+
+        // Map dependencies
+        Map<Property, Set<Property>> dependencies = new HashMap<Property, Set<Property>>();
+        for (Map.Entry<Property, Set<Property>> dependentEntry : dependents.entrySet()) {
+            Property dependent = dependentEntry.getKey();
+            for (Property dependency : dependentEntry.getValue()){
+                Set<Property> dependencyDependents = dependencies.get(dependency);
+                if (dependencyDependents==null){
+                    dependencyDependents = new HashSet<Property>();
+                }
+                dependencyDependents.add(dependent);
+                dependencies.put(dependency, dependencyDependents);
+            }
+        }
+
+        // Create initial ordered list
+        List<Property> orderedDependencies = new ArrayList<>();
+        for (Property property : dependencies.keySet()){
+            orderedDependencies.add(property);
+        }
+
+        // Order dependencies
+        for (Map.Entry<Property, Set<Property>> dependencyEntry : dependencies.entrySet()) {
+            Property property = dependencyEntry.getKey();
+            int index = orderedDependencies.indexOf(property);
+            for (Property dependent : dependencyEntry.getValue()){
+                if (orderedDependencies.contains(dependent)) {
+                    int dependentIndex = orderedDependencies.indexOf(dependent);
+                    if (dependentIndex < index) {
+                        orderedDependencies.remove(property);
+                        index = dependentIndex;
+                        orderedDependencies.add(index, property);
+                    }
+                }
+            }
+        }
+
+        // Add remaining dependencies
+        for (Property property : dependents.keySet()){
+            if (!orderedDependencies.contains(property)){
+                orderedDependencies.add(property);
+            }
+        }
+
+        // Insert in ordered map
+        for (Property property : orderedDependencies){
+            orderedProperties.put(property.getName(), property);
+        }
+
+        // Set new properties on state
+        state.setProperties(orderedProperties);
+    }
+
+    private String getRootFromPropertyName(String propertyName){
+        String rootPropertyName = propertyName;
+
+        if (propertyName.contains(REFERENCE_DELIMETER)) {
+            String[] parts = propertyName.split("\\"+REFERENCE_DELIMETER);
+            if (parts.length > 1) {
+                rootPropertyName = parts[0];
+            }
+        }
+        return rootPropertyName;
     }
 }

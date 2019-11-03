@@ -36,19 +36,7 @@ public class ParserTest {
         Assertions.assertThrows(StopValidationException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
-                new Stop("./examples/errors/validation-async-error.stop");
-            }
-        });
-        Assertions.assertThrows(StopValidationException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
                 new Stop("./examples/errors/include.stop");
-            }
-        });
-        Assertions.assertThrows(StopValidationException.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                new Stop("./examples/errors/timeouts.stop");
             }
         });
         Assertions.assertThrows(StopValidationException.class, new Executable() {

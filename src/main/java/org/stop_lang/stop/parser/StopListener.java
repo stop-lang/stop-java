@@ -1,4 +1,4 @@
-// Generated from ../stop/Stop.g4 by ANTLR 4.7.2
+// Generated from Stop.g4 by ANTLR 4.7.2
 package org.stop_lang.stop.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -78,26 +78,6 @@ public interface StopListener extends ParseTreeListener {
 	 */
 	void exitStatement(StopParser.StatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StopParser#block_with_timeout}.
-	 * @param ctx the parse tree
-	 */
-	void enterBlock_with_timeout(StopParser.Block_with_timeoutContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StopParser#block_with_timeout}.
-	 * @param ctx the parse tree
-	 */
-	void exitBlock_with_timeout(StopParser.Block_with_timeoutContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StopParser#block_with_timeout_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterBlock_with_timeout_statement(StopParser.Block_with_timeout_statementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StopParser#block_with_timeout_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitBlock_with_timeout_statement(StopParser.Block_with_timeout_statementContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link StopParser#return_block}.
 	 * @param ctx the parse tree
 	 */
@@ -117,26 +97,6 @@ public interface StopListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitReturn_block_statement(StopParser.Return_block_statementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StopParser#return_block_with_timeout}.
-	 * @param ctx the parse tree
-	 */
-	void enterReturn_block_with_timeout(StopParser.Return_block_with_timeoutContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StopParser#return_block_with_timeout}.
-	 * @param ctx the parse tree
-	 */
-	void exitReturn_block_with_timeout(StopParser.Return_block_with_timeoutContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StopParser#return_block_with_timeout_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterReturn_block_with_timeout_statement(StopParser.Return_block_with_timeout_statementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StopParser#return_block_with_timeout_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitReturn_block_with_timeout_statement(StopParser.Return_block_with_timeout_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StopParser#scalar_type}.
 	 * @param ctx the parse tree
@@ -198,35 +158,35 @@ public interface StopListener extends ParseTreeListener {
 	 */
 	void exitField(StopParser.FieldContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StopParser#async_source}.
+	 * Enter a parse tree produced by {@link StopParser#dynamic_source}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsync_source(StopParser.Async_sourceContext ctx);
+	void enterDynamic_source(StopParser.Dynamic_sourceContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link StopParser#async_source}.
+	 * Exit a parse tree produced by {@link StopParser#dynamic_source}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsync_source(StopParser.Async_sourceContext ctx);
+	void exitDynamic_source(StopParser.Dynamic_sourceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StopParser#async_source_mapping}.
+	 * Enter a parse tree produced by {@link StopParser#dynamic_source_mapping}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsync_source_mapping(StopParser.Async_source_mappingContext ctx);
+	void enterDynamic_source_mapping(StopParser.Dynamic_source_mappingContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link StopParser#async_source_mapping}.
+	 * Exit a parse tree produced by {@link StopParser#dynamic_source_mapping}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsync_source_mapping(StopParser.Async_source_mappingContext ctx);
+	void exitDynamic_source_mapping(StopParser.Dynamic_source_mappingContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StopParser#async_source_mapping_parameter}.
+	 * Enter a parse tree produced by {@link StopParser#dynamic_source_mapping_parameter}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsync_source_mapping_parameter(StopParser.Async_source_mapping_parameterContext ctx);
+	void enterDynamic_source_mapping_parameter(StopParser.Dynamic_source_mapping_parameterContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link StopParser#async_source_mapping_parameter}.
+	 * Exit a parse tree produced by {@link StopParser#dynamic_source_mapping_parameter}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsync_source_mapping_parameter(StopParser.Async_source_mapping_parameterContext ctx);
+	void exitDynamic_source_mapping_parameter(StopParser.Dynamic_source_mapping_parameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StopParser#reference}.
 	 * @param ctx the parse tree
@@ -238,15 +198,15 @@ public interface StopListener extends ParseTreeListener {
 	 */
 	void exitReference(StopParser.ReferenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link StopParser#async_source_mapping_parameter_rename}.
+	 * Enter a parse tree produced by {@link StopParser#dynamic_source_mapping_parameter_rename}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsync_source_mapping_parameter_rename(StopParser.Async_source_mapping_parameter_renameContext ctx);
+	void enterDynamic_source_mapping_parameter_rename(StopParser.Dynamic_source_mapping_parameter_renameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link StopParser#async_source_mapping_parameter_rename}.
+	 * Exit a parse tree produced by {@link StopParser#dynamic_source_mapping_parameter_rename}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsync_source_mapping_parameter_rename(StopParser.Async_source_mapping_parameter_renameContext ctx);
+	void exitDynamic_source_mapping_parameter_rename(StopParser.Dynamic_source_mapping_parameter_renameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StopParser#type}.
 	 * @param ctx the parse tree
@@ -297,16 +257,6 @@ public interface StopListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitThrow_parameter(StopParser.Throw_parameterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link StopParser#timeout}.
-	 * @param ctx the parse tree
-	 */
-	void enterTimeout(StopParser.TimeoutContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link StopParser#timeout}.
-	 * @param ctx the parse tree
-	 */
-	void exitTimeout(StopParser.TimeoutContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StopParser#transition}.
 	 * @param ctx the parse tree
