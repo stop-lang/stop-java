@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.4"
 }
 
 group 'org.stop_lang'
@@ -26,16 +27,33 @@ task sourcesJar(type: Jar) {
     archiveClassifier = 'sources'
 }
 
-publishing {
-    repositories {
-        maven {
-            url = repoUrl
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    publications = ['mavenJava']
+    pkg {
+        repo = 'stop'
+        name = 'stop'
+        userOrg = 'stop-lang'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/stop-lang/stop-java.git'
+        version {
+            name = version
+            desc = version
+            released  = new Date()
+            vcsTag = version
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
         }
     }
+    publish = true
+}
 
+publishing {
     publications {
         mavenJava(MavenPublication) {
+            groupId = group
             artifactId = 'stop'
+            version version
             from components.java
             artifact sourcesJar
             versionMapping {
