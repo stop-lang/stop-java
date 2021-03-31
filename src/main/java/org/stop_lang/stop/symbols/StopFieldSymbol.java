@@ -12,12 +12,20 @@ public abstract class StopFieldSymbol extends FieldSymbol {
     protected String packageName;
     protected String fullTypeName;
     protected StopParser.FieldContext context;
+    protected boolean annotation = false;
 
     public StopFieldSymbol(StopParser.FieldContext ctx, String typeName, String packageName){
         super(ctx.ID().getText());
-        this.typeName = typeName;
+        if (ctx.type()!=null && ctx.type().model_annotation()!=null){
+            typeName = ctx.type().model_annotation().model_type().getText();
+            this.annotation = true;
+        }else if (ctx.collection()!=null && ctx.collection().type()!=null && ctx.collection().type().model_annotation()!=null){
+            this.annotation = true;
+            typeName = ctx.collection().type().model_annotation().model_type().getText();
+        }
         this.packageName = packageName;
         this.context = ctx;
+        this.typeName = typeName;
 
         if (!isReference(typeName) && !isScalar(typeName)) {
             ParseTree p = getRootContext(ctx).getChild(0);
@@ -56,6 +64,10 @@ public abstract class StopFieldSymbol extends FieldSymbol {
 
     public boolean isOptional(){
         return this.optional;
+    }
+
+    public boolean isAnnotation(){
+        return this.annotation;
     }
 
     private ParserRuleContext getRootContext(ParserRuleContext ctx){

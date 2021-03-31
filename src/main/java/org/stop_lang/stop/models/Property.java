@@ -166,4 +166,11 @@ public class Property {
         }
         return false;
     }
+
+    public boolean canInherit(Property otherProperty){
+        return otherProperty.getName().equalsIgnoreCase(getName())
+                && otherProperty.getType().equals(getType())
+                && ( !isOptional() || (otherProperty.isOptional() == isOptional()))
+                && (otherProperty.isCollection() == isCollection());
+    }
 }

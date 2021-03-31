@@ -1,4 +1,4 @@
-// Generated from Stop.g4 by ANTLR 4.7.2
+// Generated from ../stop/Stop.g4 by ANTLR 4.7.2
 package org.stop_lang.stop.parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -59,6 +59,18 @@ public class StopBaseListener implements StopListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitInclude(StopParser.IncludeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterModel_annotation(StopParser.Model_annotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitModel_annotation(StopParser.Model_annotationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -335,6 +347,66 @@ public class StopBaseListener implements StopListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitEnqueue(StopParser.EnqueueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation(StopParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation(StopParser.AnnotationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_type(StopParser.Annotation_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_type(StopParser.Annotation_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_parameters(StopParser.Annotation_parametersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_parameters(StopParser.Annotation_parametersContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_parameter(StopParser.Annotation_parameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_parameter(StopParser.Annotation_parameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnnotation_parameter_value(StopParser.Annotation_parameter_valueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnnotation_parameter_value(StopParser.Annotation_parameter_valueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

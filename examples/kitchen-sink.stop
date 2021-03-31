@@ -29,11 +29,12 @@ Request {
     [Parameter] parameters
 }
 
+@router
 start Router {
-    Request request
+    @Request request
     -> Login
     -> Authenticate
-    -> Dashboard
+    -> @Dashboard
     -> Profile
     -> CreatePost
 }
@@ -42,6 +43,16 @@ User {
     uint64 id
     string email
     string username
+    optional string extra
+}
+
+@User
+AdminUser {
+    uint64 id
+    string email
+    string username
+    string extra
+    bool superpower
 }
 
 UserNotFoundError {
@@ -68,6 +79,7 @@ FilterPublicPosts <- [Post] {
     [Post] posts
 }
 
+@web.template(name: "test", another: "param", wow: "now")
 Login {
     -> Render
 }
@@ -79,7 +91,16 @@ Authenticate {
     -> Redirect
 }
 
+@web.template
 Dashboard {
+    uint64 user_id
+    [Post] posts <- GetUserPosts
+    -> Render
+}
+
+@web.template
+@Dashboard
+MyDashboard {
     uint64 user_id
     [Post] posts <- GetUserPosts
     -> Render
@@ -98,7 +119,7 @@ GetRequest <- Request {
 
 CreatePost {
     Post post
-    >> PushNotification
+    >> @PushNotification
     -> Response
 }
 
@@ -120,6 +141,12 @@ stop Response {
 }
 
 queue PushNotification {
+    string message
+    -> PublishPushNotification
+}
+
+@PushNotification(extra: "content")
+queue CustomPushNotification {
     string message
     -> PublishPushNotification
 }

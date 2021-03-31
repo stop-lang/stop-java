@@ -232,6 +232,31 @@ public class Stop {
             }
         }
 
+        for (Symbol symbol : def.globals.getSymbols()) {
+            if (symbol instanceof ModelSymbol) {
+                ModelSymbol modelSymbol = (ModelSymbol) symbol;
+                String name = modelSymbol.getName();
+                State modelState = states.get(name);
+
+                if (modelState == null) {
+                    throw new StopValidationException("model " + name + " not found");
+                }
+
+                for (Map.Entry<String, Map<String,String>> entry : modelSymbol.getModelAnnotations().entrySet()) {
+                    State inheritState = states.get(entry.getKey());
+                    if (inheritState == null) {
+                        throw new StopValidationException("inherited model " + entry.getKey() + " not found");
+                    }
+                    StateAnnotation stateAnnotation = new StateAnnotation(inheritState, entry.getValue());
+                    modelState.addAnnotation(stateAnnotation);
+                }
+
+                for (Annotation annotation : modelSymbol.getAnnotations()){
+                    modelState.addAnnotation(annotation);
+                }
+            }
+        }
+
         validateStateProperties();
     }
 

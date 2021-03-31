@@ -10,13 +10,21 @@ public class TransitionSymbol  extends SymbolWithScope {
     private String packageName;
     private String fullName;
     private StopParser.TransitionContext ctx;
+    private boolean annotation = false;
 
     public TransitionSymbol(StopParser.TransitionContext ctx, Scope enclosingScope, String defaultPackageName){
-        super(ctx.model_type().getText());
+        super(ctx.getText());
         setScope(enclosingScope);
         this.ctx = ctx;
         packageName = defaultPackageName;
-        String name = ctx.model_type().getText();
+        String name = "";
+
+        if (ctx.model_annotation()!= null){
+            annotation = true;
+            name = ctx.model_annotation().model_type().getText();
+        }else if (ctx.model_type()!=null) {
+            name = ctx.model_type().getText();
+        }
 
         if (!isReference(name)) {
             ParseTree p = getRootContext(ctx).getChild(0);
@@ -40,6 +48,10 @@ public class TransitionSymbol  extends SymbolWithScope {
 
     public StopParser.TransitionContext getContext(){
         return ctx;
+    }
+
+    public boolean isAnnotation(){
+        return annotation;
     }
 
     private boolean isReference(String name){

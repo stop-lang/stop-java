@@ -1,4 +1,4 @@
-// Generated from Stop.g4 by ANTLR 4.7.2
+// Generated from ../stop/Stop.g4 by ANTLR 4.7.2
 package org.stop_lang.stop.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -47,6 +47,16 @@ public interface StopListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInclude(StopParser.IncludeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StopParser#model_annotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterModel_annotation(StopParser.Model_annotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StopParser#model_annotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitModel_annotation(StopParser.Model_annotationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link StopParser#model}.
 	 * @param ctx the parse tree
@@ -277,4 +287,54 @@ public interface StopListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEnqueue(StopParser.EnqueueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StopParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation(StopParser.AnnotationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StopParser#annotation}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation(StopParser.AnnotationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StopParser#annotation_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_type(StopParser.Annotation_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StopParser#annotation_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_type(StopParser.Annotation_typeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StopParser#annotation_parameters}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_parameters(StopParser.Annotation_parametersContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StopParser#annotation_parameters}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_parameters(StopParser.Annotation_parametersContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StopParser#annotation_parameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_parameter(StopParser.Annotation_parameterContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StopParser#annotation_parameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_parameter(StopParser.Annotation_parameterContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link StopParser#annotation_parameter_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_parameter_value(StopParser.Annotation_parameter_valueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link StopParser#annotation_parameter_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_parameter_value(StopParser.Annotation_parameter_valueContext ctx);
 }

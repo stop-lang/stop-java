@@ -65,7 +65,7 @@ public class DefPhase extends StopBaseListener {
     @Override public void exitField(StopParser.FieldContext ctx) {
         StopFieldSymbol field = null;
 
-        if (ctx.type() != null && ctx.type().model_type() != null) {
+        if (ctx.type() != null && ((ctx.type().model_type() != null) || (ctx.type().model_annotation()!=null))) {
             field = new ModelFieldSymbol(ctx, packageName);
         }else if (ctx.type()!=null && ctx.type().scalar_type() != null){
             field = new ScalarFieldSymbol(ctx);

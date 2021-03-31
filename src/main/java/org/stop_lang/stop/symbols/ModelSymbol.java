@@ -3,11 +3,10 @@ package org.stop_lang.stop.symbols;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.SymbolWithScope;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.stop_lang.stop.models.Annotation;
 import org.stop_lang.stop.parser.StopParser;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ModelSymbol extends SymbolWithScope {
     private boolean stop =false;
@@ -19,6 +18,7 @@ public class ModelSymbol extends SymbolWithScope {
     private ReturnSymbol returnSymbol = null;
     private String fullName;
     private String packageName;
+    private List<StopParser.AnnotationContext> annotations = new ArrayList<>();
 
     public ModelSymbol(StopParser.ModelContext ctx, Scope enclosingScope, String defaultPackageName){
         super(ctx.MODEL_TYPE().getText());
@@ -49,6 +49,8 @@ public class ModelSymbol extends SymbolWithScope {
         }
 
         fullName = name;
+
+        this.annotations.addAll(ctx.annotation());
     }
 
     @Override
@@ -105,5 +107,45 @@ public class ModelSymbol extends SymbolWithScope {
 
     public Collection<EnqueueSymbol> getEnqueues(){
         return enqueues.values();
+    }
+
+    public Map<String, Map<String, String>> getModelAnnotations(){
+        Map<String, Map<String, String>> modelAnnotations = new HashMap<>();
+        for (StopParser.AnnotationContext annotationContext : annotations){
+            if (annotationContext.annotation_type().model_type()!=null){
+                String annotationName = annotationContext.annotation_type().model_type().getText();
+                if (!annotationName.contains(".")){
+                    annotationName = packageName + "." + annotationName;
+                }
+                Map<String, String> params = new HashMap<>();
+                if (annotationContext.annotation_parameters()!=null){
+                    for (StopParser.Annotation_parameterContext param : annotationContext.annotation_parameters().annotation_parameter()){
+                        params.put(param.ID().getText(), param.annotation_parameter_value().STRING().getText().replaceAll("\"", ""));
+                    }
+                }
+                modelAnnotations.put(annotationName, params);
+            }
+        }
+        return modelAnnotations;
+    }
+
+    public Collection<Annotation> getAnnotations(){
+        Collection<Annotation> annotationObjects = new ArrayList<>();
+        for (StopParser.AnnotationContext annotationContext : annotations){
+            if (annotationContext.annotation_type().reference()!=null){
+                String annotationName = annotationContext.annotation_type().reference().getText();
+                Map<String, String> annotationParameters = new HashMap<>();
+
+                if (annotationContext.annotation_parameters()!=null){
+                    for (StopParser.Annotation_parameterContext param : annotationContext.annotation_parameters().annotation_parameter()){
+                        annotationParameters.put(param.ID().getText(), param.annotation_parameter_value().STRING().getText().replaceAll("\"", ""));
+                    }
+                }
+
+                Annotation annotation = new Annotation(annotationName, annotationParameters);
+                annotationObjects.add(annotation);
+            }
+        }
+        return annotationObjects;
     }
 }

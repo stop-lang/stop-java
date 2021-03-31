@@ -1,9 +1,8 @@
 package org.stop_lang.stop.models;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import org.stop_lang.stop.validation.StopValidationException;
+
+import java.util.*;
 
 public class State {
     public enum StateType {
@@ -23,20 +22,25 @@ public class State {
     protected Property.PropertyType returnType = null;
     protected State returnState = null;
     protected boolean returnCollection = false;
+    protected Collection<Annotation> annotations;
 
     public State(String name){
+        this.initialize(name, StateType.SYNC);
+    }
+
+    public State(String name, StateType type){
+        this.initialize(name, type);
+    }
+
+    private void initialize(String name, StateType type){
         this.name = name;
+        this.type = type;
         this.transitions = new TreeMap<String, State>();
         this.errors = new TreeMap<String, State>();
         this.properties = new LinkedHashMap<String, Property>();
         this.enumerations = new TreeMap<String, Enumeration>();
         this.enqueues = new TreeMap<String, State>();
-        this.type = StateType.SYNC;
-    }
-
-    public State(String name, StateType type){
-        this.name = name;
-        this.type = type;
+        this.annotations = new ArrayList<>();
     }
 
     public StateInstance buildInstance(Map<String, Object> properties){
@@ -129,6 +133,42 @@ public class State {
 
     public State getReturnState(){
         return this.returnState;
+    }
+
+    public void addAnnotation(Annotation annotation) throws StopValidationException{
+        if (annotation instanceof StateAnnotation) {
+            StateAnnotation stateAnnotation = (StateAnnotation) annotation;
+            for (Map.Entry<String, Property> propertyEntry : stateAnnotation.getState().getProperties().entrySet()) {
+                Property p = propertyEntry.getValue();
+                if (p != null) {
+                    Property thisProperty = this.properties.get(propertyEntry.getKey());
+                    if (thisProperty != null) {
+                        if (!thisProperty.canInherit(p)) {
+                            throw new StopValidationException("Inherited property " + p.getName() + " is not identical to property within " + this.getName());
+                        }
+                    } else {
+                        throw new StopValidationException("Inherited property " + p.getName() + " not found within " + this.getName());
+                    }
+                }
+            }
+        }
+        this.annotations.add(annotation);
+    }
+
+    public Collection<Annotation> getAnnotations(){
+        return this.annotations;
+    }
+
+    public Collection<State> getInheritedStates(){
+        Collection<State> states = new ArrayList<>();
+        for (Annotation annotation : annotations){
+            if (annotation instanceof  StateAnnotation){
+                StateAnnotation stateAnnotation = (StateAnnotation) annotation;
+                states.add(stateAnnotation.getState());
+            }
+        }
+
+        return states;
     }
 
     @Override

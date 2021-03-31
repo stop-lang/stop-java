@@ -4,6 +4,7 @@ import org.antlr.symtab.GlobalScope;
 import org.antlr.symtab.Scope;
 import org.antlr.symtab.Symbol;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
+import org.stop_lang.stop.models.State;
 import org.stop_lang.stop.parser.StopBaseListener;
 import org.stop_lang.stop.parser.StopParser;
 import org.stop_lang.stop.symbols.*;
@@ -34,6 +35,17 @@ public class RefPhase extends StopBaseListener {
 
     @Override public void enterModel(StopParser.ModelContext ctx) {
         currentScope = scopes.get(ctx);
+        if (currentScope instanceof ModelSymbol){
+            ModelSymbol modelSymbol = (ModelSymbol)currentScope;
+            for (Map.Entry<String, Map<String,String>> entry : modelSymbol.getModelAnnotations().entrySet()) {
+                String modelAnnotation = entry.getKey();
+                ModelSymbol foundModelSymbol = (ModelSymbol) globals.resolve(modelAnnotation);
+                if (foundModelSymbol==null) {
+                    errors.add(new StopValidationException("Couldn't define annotations for \""+
+                            modelSymbol.getName() +"\" because " + modelAnnotation + " isn't defined"));
+                }
+            }
+        }
     }
 
     @Override public void exitModel(StopParser.ModelContext ctx) {
