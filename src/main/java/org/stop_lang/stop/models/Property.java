@@ -32,22 +32,25 @@ public class Property {
     protected boolean collection;
     protected boolean optional;
     private Map<String, String> providerMapping;
+    protected boolean annotation;
 
-    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional){
+    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, boolean annotation){
         this.name = name;
         this.type = type;
         this.provider = provider;
         this.collection = collection;
         this.optional = optional;
+        this.annotation = annotation;
     }
 
-    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, Map<String, String> providerMapping){
+    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, boolean annotation, Map<String, String> providerMapping){
         this.name = name;
         this.type = type;
         this.provider = provider;
         this.collection = collection;
         this.optional = optional;
         this.providerMapping = providerMapping;
+        this.annotation = annotation;
     }
 
     public String getName(){

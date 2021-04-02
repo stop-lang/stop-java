@@ -4,7 +4,7 @@ public class EnumerationProperty extends Property {
     protected Enumeration enumeration;
 
     public EnumerationProperty(String name, Enumeration enumeration, boolean collection, State provider, boolean optional){
-        super(name, PropertyType.ENUM, collection, provider, optional);
+        super(name, PropertyType.ENUM, collection, provider, false, optional);
         this.enumeration = enumeration;
     }
 

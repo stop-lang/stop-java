@@ -187,7 +187,7 @@ public class Stop {
                             String fullName = stopFieldSymbol.getTypeName();
                             State fieldState = states.get(fullName);
                             if (fieldState != null) {
-                                property = new StateProperty(symbolName, fieldState, false, provider, optional, providerMapping);
+                                property = new StateProperty(symbolName, fieldState, false, provider, optional, stopFieldSymbol.isAnnotation(), providerMapping);
                             }
                             Enumeration enumeration = enumerations.get(stopFieldSymbol.getSimpleTypeName());
                             if( enumeration==null){
@@ -205,14 +205,14 @@ public class Stop {
                             if (collectionFieldSymbol.isState()){
                                 String typeName = collectionFieldSymbol.getTypeName();
                                 State fieldState = states.get(typeName);
-                                property = new StateProperty(symbolName, fieldState, true, provider, optional, providerMapping);
+                                property = new StateProperty(symbolName, fieldState, true, provider, optional, collectionFieldSymbol.isAnnotation(), providerMapping);
                             }else {
                                 Enumeration enumeration = enumerations.get(collectionFieldSymbol.getTypeName());
                                 if(enumeration!=null){
                                     property = new EnumerationProperty(symbolName, enumeration, false, provider, optional);
                                 }else {
                                     propertyType = getPropertyType(collectionFieldSymbol.getTypeName());
-                                    property = new Property(symbolName, propertyType, true, provider, optional, providerMapping);
+                                    property = new Property(symbolName, propertyType, true, provider, optional, false, providerMapping);
                                 }
                             }
                         }else if (childSymbol instanceof ScalarFieldSymbol){
@@ -220,7 +220,7 @@ public class Stop {
                             Property.PropertyType propertyType = getPropertyType(scalarFieldSymbol.getTypeName());
 
                             if(propertyType!=null){
-                                property = new Property(symbolName, propertyType, false, provider, optional, providerMapping);
+                                property = new Property(symbolName, propertyType, false, provider, optional, false, providerMapping);
                             }
                         }
                         if (property!=null){
