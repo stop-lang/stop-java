@@ -49,6 +49,16 @@ bintray {
 }
 
 publishing {
+    repositories {
+        maven {
+            url "s3://stop-maven"
+            credentials(AwsCredentials) {
+                accessKey "${System.getenv('AWS_KEY')}"
+                secretKey "${System.getenv('AWS_SECRET')}"
+            }
+        }
+    }
+
     publications {
         mavenJava(MavenPublication) {
             groupId = group
