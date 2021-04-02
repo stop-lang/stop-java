@@ -116,32 +116,32 @@ public class Stop {
                     throw new StopValidationException("model " + name + " not found");
                 }
 
-                TreeMap<String, State> transitions = new TreeMap<String, State>(String.CASE_INSENSITIVE_ORDER);
+                TreeMap<String, StateTransition> transitions = new TreeMap<String, StateTransition>(String.CASE_INSENSITIVE_ORDER);
                 for(TransitionSymbol transitionSymbol : modelSymbol.getTransitions()){
                     String transitionName = transitionSymbol.getName();
                     State transitionState = states.get(transitionName);
                     if (transitionState != null){
-                        transitions.put(transitionName, transitionState);
+                        transitions.put(transitionName, new StateTransition(transitionState, transitionSymbol.isAnnotation()));
                     }
                 }
                 modelState.setTransitions(transitions);
 
-                TreeMap<String, State> enqueues = new TreeMap<String, State>(String.CASE_INSENSITIVE_ORDER);
+                TreeMap<String, StateTransition> enqueues = new TreeMap<String, StateTransition>(String.CASE_INSENSITIVE_ORDER);
                 for(EnqueueSymbol enqueueSymbol : modelSymbol.getEnqueues()){
                     String enqueueName = enqueueSymbol.getName();
                     State enqueueState = states.get(enqueueName);
                     if (enqueueState != null){
-                        enqueues.put(enqueueName, enqueueState);
+                        enqueues.put(enqueueName, new StateTransition(enqueueState, enqueueSymbol.isAnnotation()));
                     }
                 }
                 modelState.setEnqueues(enqueues);
 
-                TreeMap<String, State> errors = new TreeMap<String, State>(String.CASE_INSENSITIVE_ORDER);
+                TreeMap<String, StateTransition> errors = new TreeMap<String, StateTransition>(String.CASE_INSENSITIVE_ORDER);
                 for(ThrowSymbol throwSymbol : modelSymbol.getErrors()) {
                     String errorTransitionName = throwSymbol.getName();
                     State errorState = states.get(errorTransitionName);
                     if (errorState!=null){
-                        errors.put(errorTransitionName, errorState);
+                        errors.put(errorTransitionName, new StateTransition(errorState, throwSymbol.isAnnotation()));
                     }
                 }
                 modelState.setErrors(errors);
@@ -167,7 +167,7 @@ public class Stop {
                         returnState = states.get(returnTypeString);
                     }
 
-                    modelState.setReturn(returnPropertyType, returnState, modelSymbol.getReturn().isCollection());
+                    modelState.setReturn(returnPropertyType, returnState, modelSymbol.getReturn().isCollection(), modelSymbol.getReturn().isAnnotation());
                 }
 
                 LinkedHashMap<String, Property> properties = new LinkedHashMap<String, Property>();

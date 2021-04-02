@@ -63,4 +63,8 @@ public class EnqueueSymbol extends SymbolWithScope {
     protected boolean isReference(String name){
         return name.contains(".");
     }
+
+    public boolean isAnnotation(){
+        return annotation;
+    }
 }

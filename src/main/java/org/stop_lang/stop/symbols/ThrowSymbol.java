@@ -10,12 +10,19 @@ public class ThrowSymbol extends SymbolWithScope {
     private String fullName;
     private String packageName;
     private StopParser.Throw_parameterContext ctx;
+    private boolean annotation = false;
 
     public ThrowSymbol(StopParser.Throw_parameterContext ctx, Scope enclosingScope, String defaultPackageName){
         super(ctx.model_type().getText());
         setScope(enclosingScope);
         this.ctx = ctx;
-        String name = ctx.model_type().getText();
+        String name = "";
+        if (ctx.model_annotation()!= null){
+            annotation = true;
+            name = ctx.model_annotation().model_type().getText();
+        }else if (ctx.model_type()!=null) {
+            name = ctx.model_type().getText();
+        }
         packageName = defaultPackageName;
 
         if (!isReference(name)) {
@@ -51,5 +58,9 @@ public class ThrowSymbol extends SymbolWithScope {
 
     protected boolean isReference(String name){
         return name.contains(".");
+    }
+
+    public boolean isAnnotation(){
+        return annotation;
     }
 }

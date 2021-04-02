@@ -13,16 +13,17 @@ public class State {
     }
 
     protected String name;
-    protected Map<String, State> transitions;
-    protected Map<String, State> errors;
+    protected Map<String, StateTransition> transitions;
+    protected Map<String, StateTransition> errors;
     protected LinkedHashMap<String, Property> properties;
     protected Map<String, Enumeration> enumerations;
-    protected Map<String, State> enqueues;
+    protected Map<String, StateTransition> enqueues;
     protected StateType type;
     protected Property.PropertyType returnType = null;
     protected State returnState = null;
     protected boolean returnCollection = false;
     protected Collection<Annotation> annotations;
+    protected boolean returnAnnotation = false;
 
     public State(String name){
         this.initialize(name, StateType.SYNC);
@@ -35,11 +36,11 @@ public class State {
     private void initialize(String name, StateType type){
         this.name = name;
         this.type = type;
-        this.transitions = new TreeMap<String, State>();
-        this.errors = new TreeMap<String, State>();
+        this.transitions = new TreeMap<String, StateTransition>();
+        this.errors = new TreeMap<String, StateTransition>();
         this.properties = new LinkedHashMap<String, Property>();
         this.enumerations = new TreeMap<String, Enumeration>();
-        this.enqueues = new TreeMap<String, State>();
+        this.enqueues = new TreeMap<String, StateTransition>();
         this.annotations = new ArrayList<>();
     }
 
@@ -51,27 +52,27 @@ public class State {
         return this.name;
     }
 
-    public void setTransitions(TreeMap<String, State> transitions){
+    public void setTransitions(TreeMap<String, StateTransition> transitions){
         this.transitions = transitions;
     }
 
-    public Map<String, State> getTransitions(){
+    public Map<String, StateTransition> getTransitions(){
         return this.transitions;
     }
 
-    public void setEnqueues(TreeMap<String, State> transitions){
+    public void setEnqueues(TreeMap<String, StateTransition> transitions){
         this.enqueues = transitions;
     }
 
-    public Map<String, State> getEnqueues(){
+    public Map<String, StateTransition> getEnqueues(){
         return this.enqueues;
     }
 
-    public void setErrors(TreeMap<String, State> errors){
+    public void setErrors(TreeMap<String, StateTransition> errors){
         this.errors = errors;
     }
 
-    public Map<String, State> getErrors(){
+    public Map<String, StateTransition> getErrors(){
         return this.errors;
     }
 
@@ -117,10 +118,11 @@ public class State {
         return this.returnType != null;
     }
 
-    public void setReturn(Property.PropertyType type, State state, boolean collection){
+    public void setReturn(Property.PropertyType type, State state, boolean collection, boolean annotation){
         this.returnType = type;
         this.returnState = state;
         this.returnCollection = collection;
+        this.returnAnnotation = annotation;
     }
 
     public Property.PropertyType getReturnType(){

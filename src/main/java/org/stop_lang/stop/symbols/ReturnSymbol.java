@@ -9,6 +9,7 @@ public class ReturnSymbol extends SymbolWithScope {
     private String fullName;
     private StopParser.ModelContext ctx;
     private boolean scalar;
+    private boolean annotation = false;
 
     public ReturnSymbol(StopParser.ModelContext ctx, Scope enclosingScope, String defaultPackageName){
         super(ctx.return_type().getText());
@@ -20,7 +21,15 @@ public class ReturnSymbol extends SymbolWithScope {
 
         if (ctx.return_type().collection() != null) {
             if (ctx.return_type().collection().type() != null) {
-                if (ctx.return_type().collection().type().model_type()!=null) {
+                if (ctx.return_type().collection().type().model_annotation()!=null) {
+                    name = ctx.return_type().collection().type().model_annotation().model_type().getText();
+                    annotation = true;
+                    if (!isReference(name)) {
+                        if (packageName != null) {
+                            name = packageName + "." + name;
+                        }
+                    }
+                }else if (ctx.return_type().collection().type().model_type()!=null) {
                     name = ctx.return_type().collection().type().getText();
                     if (!isReference(name)) {
                         if (packageName != null) {
@@ -33,7 +42,15 @@ public class ReturnSymbol extends SymbolWithScope {
                 }
             }
         }else if(ctx.return_type().type() != null){
-            if (ctx.return_type().type().model_type()!=null) {
+            if (ctx.return_type().type().model_annotation()!=null) {
+                name = ctx.return_type().type().model_annotation().model_type().getText();
+                annotation = true;
+                if (!isReference(name)) {
+                    if (packageName != null) {
+                        name = packageName + "." + name;
+                    }
+                }
+            }else if (ctx.return_type().type().model_type()!=null) {
                 name = ctx.return_type().type().getText();
                 if (!isReference(name)) {
                     if (packageName != null) {
@@ -64,6 +81,10 @@ public class ReturnSymbol extends SymbolWithScope {
 
     private boolean isReference(String name){
         return name.contains(".");
+    }
+
+    public boolean isAnnotation(){
+        return annotation;
     }
 }
 
