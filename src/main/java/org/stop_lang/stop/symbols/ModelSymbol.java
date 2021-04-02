@@ -114,7 +114,7 @@ public class ModelSymbol extends SymbolWithScope {
         for (StopParser.AnnotationContext annotationContext : annotations){
             if (annotationContext.annotation_type().model_type()!=null){
                 String annotationName = annotationContext.annotation_type().model_type().getText();
-                if (!annotationName.contains(".")){
+                if (!annotationName.contains(".") && (packageName!=null)){
                     annotationName = packageName + "." + annotationName;
                 }
                 Map<String, String> params = new HashMap<>();
