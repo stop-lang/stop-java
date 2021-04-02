@@ -176,4 +176,8 @@ public class Property {
                 && ( !isOptional() || (otherProperty.isOptional() == isOptional()))
                 && (otherProperty.isCollection() == isCollection());
     }
+
+    public boolean isAnnotation() {
+        return annotation;
+    }
 }
