@@ -67,7 +67,11 @@ public class StateInstance {
                                 StateInstance stateInstance = (StateInstance)element;
                                 StateProperty stateProperty = (StateProperty)property;
 
-                                if ( !stateProperty.getState().equals(stateInstance.getState()) ){
+                                if (stateProperty.isAnnotation()){
+                                    if ( !stateProperty.getState().equals(stateInstance.getState()) && !stateInstance.getState().getInheritedStates().contains(stateProperty.getState())){
+                                        throw new StopValidationException("State instance " + stateInstance.getState().getName() + " doesn't match annotated state property " + stateProperty.getState().getName());
+                                    }
+                                }else if ( !stateProperty.getState().equals(stateInstance.getState()) ){
                                     throw new StopValidationException("State instance " + stateInstance.getState().getName() + " doesn't match property " + stateProperty.getState().getName());
                                 }
                             }

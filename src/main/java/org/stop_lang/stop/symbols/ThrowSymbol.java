@@ -13,7 +13,7 @@ public class ThrowSymbol extends SymbolWithScope {
     private boolean annotation = false;
 
     public ThrowSymbol(StopParser.Throw_parameterContext ctx, Scope enclosingScope, String defaultPackageName){
-        super(ctx.model_type().getText());
+        super(ctx.getText());
         setScope(enclosingScope);
         this.ctx = ctx;
         String name = "";
