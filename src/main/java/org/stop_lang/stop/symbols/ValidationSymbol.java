@@ -31,7 +31,8 @@ public class ValidationSymbol extends SymbolWithScope {
                 if (parameterContext.validation_parameter_value().NUMBER()!=null){
                     parameters.put(parameterContext.ID().getText(), Double.valueOf(parameterContext.validation_parameter_value().NUMBER().getText()));
                 }else{
-                    parameters.put(parameterContext.ID().getText(), parameterContext.validation_parameter_value().STRING().getText());
+                    String valueString = parameterContext.validation_parameter_value().STRING().getText();
+                    parameters.put(parameterContext.ID().getText(), valueString.substring(1,valueString.length()-2));
                 }
             }
         }
