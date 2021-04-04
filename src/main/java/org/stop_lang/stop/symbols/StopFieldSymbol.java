@@ -5,6 +5,9 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.stop_lang.stop.parser.StopParser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class StopFieldSymbol extends FieldSymbol {
     protected String typeName;
     protected DynamicModelSymbol dynamicModel;
@@ -13,6 +16,7 @@ public abstract class StopFieldSymbol extends FieldSymbol {
     protected String fullTypeName;
     protected StopParser.FieldContext context;
     protected boolean annotation = false;
+    protected Map<String, ValidationSymbol> validations;
 
     public StopFieldSymbol(StopParser.FieldContext ctx, String typeName, String packageName){
         super(ctx.ID().getText());
@@ -26,6 +30,7 @@ public abstract class StopFieldSymbol extends FieldSymbol {
         this.packageName = packageName;
         this.context = ctx;
         this.typeName = typeName;
+        this.validations = new HashMap<>();
 
         if (!isReference(typeName) && !isScalar(typeName)) {
             ParseTree p = getRootContext(ctx).getChild(0);
@@ -83,5 +88,13 @@ public abstract class StopFieldSymbol extends FieldSymbol {
 
     protected boolean isScalar(String name){
         return Character.isLowerCase(name.charAt(0));
+    }
+
+    public void addValidation(ValidationSymbol validationSymbol){
+        this.validations.put(validationSymbol.getName(), validationSymbol);
+    }
+
+    public Map<String, ValidationSymbol> getValidations(){
+        return validations;
     }
 }

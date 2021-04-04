@@ -1,0 +1,34 @@
+start Begin {
+    string post_type {
+        !state @Post
+    }
+    string email {
+        !regex(matches: "email_regex")
+        !length(min: 3, max: 255)
+    }
+    int64 slot {
+        !range(min: 1, max:10)
+    }
+    -> End
+}
+
+Post {
+    string title
+}
+
+@Post
+Podcast {
+    string title
+    string url
+}
+
+@Post
+Video {
+    string title
+    string url
+    string format
+}
+
+stop End {
+
+}

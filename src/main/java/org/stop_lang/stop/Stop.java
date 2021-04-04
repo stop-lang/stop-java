@@ -179,6 +179,27 @@ public class Stop {
                         State provider = null;
                         Map<String, String> providerMapping = null;
                         boolean optional = stopFieldSymbol.isOptional();
+                        Collection<PropertyValidation> validations = new ArrayList<>();
+                        for (ValidationSymbol validationSymbol : stopFieldSymbol.getValidations().values()){
+                            if (validationSymbol.getName().equalsIgnoreCase("state")){
+                                String kind = (String)validationSymbol.getParameters().get("kind");
+                                if (kind==null){
+                                    throw new StopValidationException("state validation parameter kind not found");
+                                }
+                                boolean annotated = false;
+                                if (kind.startsWith("@")){
+                                    annotated=true;
+                                    kind = kind.substring(1);
+                                }
+                                State kindState = states.get(kind);
+                                if (kindState == null){
+                                    throw new StopValidationException("state validation parameter kind state not found");
+                                }
+                                validations.add(new StatePropertyValidation(kindState, annotated));
+                            }else{
+                                validations.add(new PropertyValidation(validationSymbol.getName(), validationSymbol.getParameters()));
+                            }
+                        }
                         if ( stopFieldSymbol.getDynamicModel() != null){
                             provider = states.get(stopFieldSymbol.getDynamicModel().getName());
                             providerMapping = stopFieldSymbol.getDynamicModel().getSourceMapping();
@@ -212,7 +233,7 @@ public class Stop {
                                     property = new EnumerationProperty(symbolName, enumeration, false, provider, optional);
                                 }else {
                                     propertyType = getPropertyType(collectionFieldSymbol.getTypeName());
-                                    property = new Property(symbolName, propertyType, true, provider, optional, false, providerMapping);
+                                    property = new Property(symbolName, propertyType, true, provider, optional, false, new ArrayList<>(), providerMapping);
                                 }
                             }
                         }else if (childSymbol instanceof ScalarFieldSymbol){
@@ -220,7 +241,7 @@ public class Stop {
                             Property.PropertyType propertyType = getPropertyType(scalarFieldSymbol.getTypeName());
 
                             if(propertyType!=null){
-                                property = new Property(symbolName, propertyType, false, provider, optional, false, providerMapping);
+                                property = new Property(symbolName, propertyType, false, provider, optional, false, validations, providerMapping);
                             }
                         }
                         if (property!=null){
@@ -362,6 +383,8 @@ public class Stop {
 
         // Set new properties on state
         state.setProperties(orderedProperties);
+
+        runPropertyValidations(state);
     }
 
     private List<Property> orderDependencies(Map<Property, Set<Property>> dependencies) throws StopValidationException{
@@ -421,5 +444,11 @@ public class Stop {
             }
         }
         return rootPropertyName;
+    }
+
+    private void runPropertyValidations(State state) throws StopValidationException{
+        for (Property property : state.getOrderedProperties()){
+
+        }
     }
 }

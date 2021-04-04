@@ -1,12 +1,13 @@
 package org.stop_lang.stop.models;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class StateProperty extends Property {
     protected State state;
 
     public StateProperty(String name, State state, boolean collection, State provider, boolean optional, boolean annotation, Map<String, String> providerMapping){
-        super(name, PropertyType.STATE, collection, provider, optional, annotation, providerMapping);
+        super(name, PropertyType.STATE, collection, provider, optional, annotation, new ArrayList<>(), providerMapping);
         this.state = state;
     }
 

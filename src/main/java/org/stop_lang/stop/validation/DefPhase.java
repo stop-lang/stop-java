@@ -81,6 +81,17 @@ public class DefPhase extends StopBaseListener {
             if ( ctx.OPTIONAL() != null){
                 field.setOptional(true);
             }
+            if (ctx.validation_block()!=null){
+                for (StopParser.Validation_statementContext statementContext : ctx.validation_block().validation_statement()){
+                    String name;
+                    if (statementContext.state_validation()!=null){
+                        name = "state";
+                    }else{
+                        name = statementContext.validation().ID().getText();
+                    }
+                    field.addValidation(new ValidationSymbol(name, statementContext, packageName));
+                }
+            }
             currentScope.define(field);
         }
     }

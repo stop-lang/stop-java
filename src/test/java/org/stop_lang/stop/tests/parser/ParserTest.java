@@ -19,6 +19,7 @@ public class ParserTest {
         new Stop("./examples/kitchen-sink.stop");
         new Stop("./examples/types.stop");
         new Stop("./examples/references.stop");
+        new Stop("./examples/validation.stop");
         Stop enumStop = new Stop("./examples/enum.stop");
         State getStatus = enumStop.getStates().get("sandbox.GetStatus");
         Property property = getStatus.getProperties().get("status");

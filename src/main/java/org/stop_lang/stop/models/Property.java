@@ -2,6 +2,7 @@ package org.stop_lang.stop.models;
 
 import java.nio.ByteBuffer;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Map;
 
 public class Property {
@@ -33,23 +34,26 @@ public class Property {
     protected boolean optional;
     private Map<String, String> providerMapping;
     protected boolean annotation;
+    protected Collection<PropertyValidation> validations;
 
-    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, boolean annotation){
+    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, boolean annotation, Collection<PropertyValidation> validations){
         this.name = name;
         this.type = type;
         this.provider = provider;
         this.collection = collection;
         this.optional = optional;
         this.annotation = annotation;
+        this.validations = validations;
     }
 
-    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, boolean annotation, Map<String, String> providerMapping){
+    public Property(String name, PropertyType type, boolean collection, State provider, boolean optional, boolean annotation, Collection<PropertyValidation> validations, Map<String, String> providerMapping){
         this.name = name;
         this.type = type;
         this.provider = provider;
         this.collection = collection;
         this.optional = optional;
         this.providerMapping = providerMapping;
+        this.validations = validations;
         this.annotation = annotation;
     }
 
@@ -179,5 +183,9 @@ public class Property {
 
     public boolean isAnnotation() {
         return annotation;
+    }
+
+    public Collection<PropertyValidation> getValidations(){
+        return validations;
     }
 }
